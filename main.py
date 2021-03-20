@@ -1,16 +1,17 @@
-# This is a sample Python script.
+import requests
+from bs4 import BeautifulSoup
 
-# Press Umschalt+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Strg+F8 to toggle the breakpoint.
+#
+def get_url_content(url):
+    return requests.get(url).text
 
 
-# Press the green button in the gutter to run the script.
+def crawl(url):
+    print(url)
+    content = get_url_content(url);
+
+    pass
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    crawl('https://www.heidenheim.dhbw.de/')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
