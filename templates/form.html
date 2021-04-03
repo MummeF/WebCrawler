@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebCrawler of DOOM</title>
+</head>
+
+<body>
+    <section>
+        <h1>Add to DB</h1>
+        <form action="/crawl" method="GET" target="#">
+            <label for="url">URL: </label><br>
+            <input type="text" id="url" name="url"><br>
+            <input type="submit" value="Add to database">
+        </form>
+    </section>
+    <section>
+        <h1>Search</h1>
+        <form action="/search" method="GET" target="#">
+            <label for="word">Suchbegriff: </label><br>
+            <input type="text" id="word" name="word"><br>
+            <input type="submit" value="Search">
+        </form>
+    </section>
+</body>
+
+</html>
