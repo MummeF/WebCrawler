@@ -11,19 +11,19 @@ template_dir = os.path.join('templates')
 templateLoader = jinja2.FileSystemLoader(searchpath="./templates")
 jinja_env = jinja2.Environment(loader=templateLoader)
 
-
+#Startseite
 @app.route('/')
 def home():
     template = jinja_env.get_template('form.html')
     return template.render()
 
-
+#Crawled eine als RequestParam übergebene URL
 @app.route('/crawl')
 def crawl_():
     url = request.args.get("url", "", str)
     crawl(url, 1)
     return f"Successfully added url {url} to database. You can close this page now."
-
+#Sucht nach einem Wort
 @app.route('/search')
 def search_():
     word = request.args.get("word", "", str)

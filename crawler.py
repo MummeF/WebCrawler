@@ -6,24 +6,24 @@ import urllib.parse
 
 import db_service
 
-
+#Gibt den Quellcode einer URL zurück
 def get_url_content(url):
     return requests.get(url).text
 
-
+#Crawled die URL und alle dort gefundenen URL's bis in die angegebene Tiefe
 def crawl(url, depth):
     result = crawl_recursive(url, depth, [], [])
     db_service.addUrls(result[0])
     db_service.addWords(result[1])
     pass
 
-
+#Gibt die Domain aus einer URL zurück
 def findDomain(url):
     protocol = "https://" if url.startswith("https") else "http://"
     parsedUrl = urllib.parse.urlparse(url)
     return protocol + parsedUrl.netloc
 
-
+#Sucht nach URL's in dem übergebenen Quellcode
 def findChildren(soup, domain):
     valid_urls = []
     for link in soup.findAll('a'):
@@ -35,6 +35,7 @@ def findChildren(soup, domain):
                 valid_urls.append(domain + href)
     return valid_urls
 
+#Sucht nach allen Wörtern, die nicht in einem HTML-Tag enthalten sind
 def findWords(soup):
     found_words = []
 
@@ -48,6 +49,7 @@ def findWords(soup):
             found_words.append(word)
     return found_words
 
+#Rekursiver Aufruf zum Crawlen. Durchsucht die URL nach Wörtern und URL's
 def crawl_recursive(url, depth, crawled_urls, found_words):
     if not crawled_urls.__contains__(url):
         # print(url)

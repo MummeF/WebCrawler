@@ -8,23 +8,23 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-
+#Wandelt einzelne Werte in einen Tupel mit nur einem Wert
 def mapSingleToTuple(single):
     return (single,)
 
-
+#Setzt ' um ein Wort, escaped enthaltene ' mit \
 def marks(word):
     word = word.replace("'", "\\'")
     return f"'{word}'"
 
-
+#Fügt Links in die Datenbank
 def addUrls(links):
     links = list(map(mapSingleToTuple, links))
     sql = 'INSERT IGNORE INTO link (url) VALUES (%s)'
     mycursor.executemany(sql, links)
     mydb.commit()
 
-
+#Fügt Wörter in die Datenbank und verknüpft die Wörter mit den URL's
 def addWords(url_to_words):
     for element in url_to_words:
         url = element[0]
@@ -33,21 +33,21 @@ def addWords(url_to_words):
         urlId = getUrlId(url)
         saveWordsToId(urlId, wordsToId)
 
-
+#Gibt die Informationen über ein Wort aus
 def getWordInformation(word):
     searchsql = f"select w.*, l.* from word as w join word_to_link as wtl on w.id = wtl.id_word join link as l on wtl.id_link = l.id where w.word like '%{word}%' order by w.id"
 
     mycursor.execute(searchsql)
     return mycursor.fetchall()
 
-
+#Gibt die ID einer URL
 def getUrlId(url):
     searchsql = f"select * from link where url='{url}'"
 
     mycursor.execute(searchsql)
     return mycursor.fetchone()[0]
 
-
+#Sucht nach den Informationen über ein Wort, gibt dann alle gefundenen Wörter inkl. ID und den URL's aus, in denen dieses Wort enthalten ist.
 def search(word):
     result = []
     wordInformation = getWordInformation(word)
@@ -72,13 +72,13 @@ def search(word):
         result.append((lastword, lastwordStr, lastwordlinks))
     return result
 
-
+#Fügt die Wörter ein
 def saveWords(words):
     sql = 'INSERT IGNORE INTO word (word) VALUES (%s)'
     mycursor.executemany(sql, list(map(mapSingleToTuple, words)))
     mydb.commit()
 
-
+#Fügt die Verknüpfungen zwischen Wort und Link ein
 def saveWordsToId(urlId, wordsToId):
     sql = 'INSERT IGNORE INTO word_to_link (id_word, id_link) VALUES (%s, %s)'
     list_to_insert = []
@@ -89,7 +89,7 @@ def saveWordsToId(urlId, wordsToId):
     mycursor.executemany(sql, list_to_insert)
     mydb.commit()
 
-
+#Gibt die ID's einer Liste von Wörtern zurück
 def getWordIds(words):
     if len(words) > 0:
         wordsql = ",".join(list(map(marks, words)))
