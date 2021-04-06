@@ -12,10 +12,6 @@ mycursor = mydb.cursor()
 def mapSingleToTuple(single):
     return (single,)
 
-#Setzt ' um ein Wort, escaped enthaltene ' mit \
-def marks(word):
-    word = word.replace("'", "\\'")
-    return f"'{word}'"
 
 #Fügt Links in die Datenbank
 def addUrls(links):
@@ -52,7 +48,6 @@ def search(word):
     result = []
     wordInformation = getWordInformation(word)
     if(len(wordInformation) > 0):
-        print(wordInformation)
         lastword = -1
         lastwordStr = ""
         lastwordlinks = []
@@ -92,10 +87,8 @@ def saveWordsToId(urlId, wordsToId):
 #Gibt die ID's einer Liste von Wörtern zurück
 def getWordIds(words):
     if len(words) > 0:
-        wordsql = ",".join(list(map(marks, words)))
-        searchsql = f'select * from word where word in ({wordsql})'
-        searchsql = searchsql.replace("\n", "")
+        searchsql = f'select * from word where word in (%s)'
         print(searchsql)
-        mycursor.execute(searchsql)
+        mycursor.executemany(searchsql, list(map(mapSingleToTuple, words)))
         return mycursor.fetchall()
     return []

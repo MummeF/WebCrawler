@@ -8,5 +8,4 @@ def dbTest():
     pass
 
 if __name__ == '__main__':
-    # crawl('https://www.heidenheim.dhbw.de/', 1)
     WebServer.app.run()

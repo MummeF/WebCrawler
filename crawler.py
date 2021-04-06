@@ -52,7 +52,6 @@ def findWords(soup):
 #Rekursiver Aufruf zum Crawlen. Durchsucht die URL nach Wörtern und URL's
 def crawl_recursive(url, depth, crawled_urls, found_words):
     if not crawled_urls.__contains__(url):
-        # print(url)
         crawled_urls.append(url)
 
         content = get_url_content(url)
